@@ -31,18 +31,30 @@ pub fn init_cargo_files(crate_name: &str, crate_version: &str, _crate_dependenci
 
     // create Cargo.toml file in ./crate-name
     let file_path = PathBuf::from(crate_name).join("Cargo.toml");
+    // Create the lock file
     let lock_file_path = PathBuf::from(crate_name).join("Cargo.lock");
+    // Create src/main.rs file
     let main_rs_path = PathBuf::from(crate_name).join("src").join("main.rs");
 
+    // Make the files
     let mut file = get_file(file_path);
     let _ = get_file(lock_file_path);
     let mut main_file = get_file(main_rs_path);
 
+    // Erase files' content
     file.set_len(0).expect("Failed to flush Cargo.toml file");
     main_file.set_len(0).expect("Failed to flush src/main.rs file");
 
-    file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"", crate_name, crate_version).as_bytes()).expect("Error while trying to write into the Cargo.toml file.");
-    main_file.write(format!("fn main() {{\n     println!(\"Project created with Project generator v0.1.0\");\n}}").as_bytes()).expect("Error while trying to write into the src/main.rs file.");
+    // write into the files
+    match file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"", crate_name, crate_version).as_bytes()) {
+        Ok(_) => (),
+        Err(e) => return Err(Box::new(e))
+    }
+
+    match main_file.write(format!("fn main() {{\n     println!(\"Project created with Project generator v0.1.0\");\n}}").as_bytes()) {
+        Ok(_) => (),
+        Err(e) => return Err(Box::new(e))
+    }
 
     Ok(())
 }
