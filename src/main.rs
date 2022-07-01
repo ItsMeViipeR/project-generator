@@ -2,8 +2,10 @@ mod rust;
 
 use std::io::{self, Write};
 
+use rust::Dependency;
+
 fn create_rust_project() {
-    match rust::init_cargo_files("Test", "0.1.0", vec!["serde", "serde_json"]) {
+    match rust::init_cargo_files("Test", "0.1.0", vec![Dependency::new("multifactorials", "0.3.0"), Dependency::new("tauri", "1.0.0")]) {
         Ok(_) => (),
         Err(err) => eprintln!("Error: {}", err)
     }
