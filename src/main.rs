@@ -24,7 +24,9 @@ fn main() {
 
     user_input = user_input.replace("\n", "").as_str().parse().expect("Error parsing from String to &str");
 
-    match user_input.to_lowercase().as_str() {
+    println!("{:#?}", user_input.to_lowercase().as_str().replace("\r", ""));
+
+    match user_input.to_lowercase().replace("\r", "").as_str() {
         "rust" => {
             println!("Creating Rust project...");
             create_rust_project();
