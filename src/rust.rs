@@ -129,33 +129,32 @@ pub fn init_cargo_files(crate_name: &str, crate_version: &str, crate_dependencie
     file.set_len(0).expect("Failed to flush Cargo.toml file");
     main_file.set_len(0).expect("Failed to flush src/main.rs file");
 
-    // write into the files
-    /* match file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"", crate_name, crate_version).as_bytes()) {
-        Ok(_) => (),
-        Err(e) => return Err(Box::new(e))
-    } */
-
     match main_file.write(format!("fn main() {{\n     println!(\"Project created with Project generator v0.1.0\");\n}}").as_bytes()) {
         Ok(_) => (),
         Err(e) => return Err(Box::new(e))
     }
 
-    for dependency in crate_dependencies.clone() {
-        // println!("{} = {}", dependency.name, dependency.version);
+    if crate_dependencies.len() < 1 {
+        match file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"\n\n[dependencies]\n", crate_name, crate_version).as_bytes()) {
+            Ok(_) => (),
+            Err(e) => return Err(Box::new(e))
+        }
+    } else {
+        for dependency in crate_dependencies.clone() {
+            let content = fs::read_to_string(file_path.clone()).unwrap_or(String::from(""));
 
-        let content = fs::read_to_string(file_path.clone()).unwrap_or(String::from(""));
+            if content == String::from("") {
+                match file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"\n\n[dependencies]\n{} = \"{}\"", crate_name, crate_version, dependency.name, dependency.version).as_bytes()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(Box::new(e))
+                }
+            } else {
+                file.set_len(0).expect("Cannot set file len to 0");
 
-        if content.is_empty() {
-            match file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"\n\n[dependencies]\n{} = \"{}\"", crate_name, crate_version, dependency.name, dependency.version).as_bytes()) {
-                Ok(_) => (),
-                Err(e) => return Err(Box::new(e))
-            }
-        } else {
-            file.set_len(0).expect("Cannot set file len to 0");
-
-            match file.write(format!("{}\n{} = \"{}\"", content, dependency.name, dependency.version).as_bytes()) {
-                Ok(_) => (),
-                Err(e) => return Err(Box::new(e))
+                match file.write(format!("{}\n{} = \"{}\"", content, dependency.name, dependency.version).as_bytes()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(Box::new(e))
+                }
             }
         }
     }
