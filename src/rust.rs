@@ -6,12 +6,12 @@ use std::path::PathBuf;
 
 #[derive(Clone, Debug)]
 pub struct Dependency {
-    name: &'static str,
-    version: &'static str
+    name: String,
+    version: String
 }
 
 impl Dependency {
-    pub fn new(name: &'static str, version: &'static str) -> Self {
+    pub fn new(name: String, version: String) -> Self {
         Self {
             name,
             version,
@@ -73,28 +73,35 @@ pub fn init_cargo_files(crate_name: &str, crate_version: &str, crate_dependencie
         Err(e) => return Err(Box::new(e))
     }
 
-    for dependency in crate_dependencies.clone() {
-        let content = fs::read_to_string(file_path.clone()).expect("Failed to read file");
-        // file.set_len(0).expect("Failed to flush Cargo.toml file");
+    if crate_dependencies.len() < 1 {
+        match file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"\n\n[dependencies]\n", crate_name, crate_version).as_bytes()) {
+            Ok(_) => (),
+            Err(e) => return Err(Box::new(e))
+        }
+    } else {
+        for dependency in crate_dependencies.clone() {
+            let content = fs::read_to_string(file_path.clone()).expect("Failed to read file");
+            // file.set_len(0).expect("Failed to flush Cargo.toml file");
 
-        if content == String::from("") {
-            match file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"\n\n[dependencies]\n{} = \"{}\"", crate_name, crate_version, dependency.name, dependency.version).as_bytes()) {
-                Ok(_) => (),
-                Err(e) => return Err(Box::new(e))
+            if content == String::from("") {
+                match file.write(format!("[package]\nname = \"{}\"\nversion = \"{}\"\n\n[dependencies]\n{} = \"{}\"", crate_name, crate_version, dependency.name, dependency.version).as_bytes()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(Box::new(e))
+                }
+            } else {
+                println!("{}", content);
+
+                file.seek(SeekFrom::Start(0)).expect("Cannot seek");
+
+                file.set_len(0).expect("Cannot set file len to 0");
+
+                match file.write(format!("{}\n{} = \"{}\"", content, dependency.name, dependency.version).as_bytes()) {
+                    Ok(_) => (),
+                    Err(e) => return Err(Box::new(e))
+                }
+
+                println!("{}", fs::read_to_string(file_path.clone()).expect("Failed to read file"));
             }
-        } else {
-            println!("{}", content);
-
-            file.seek(SeekFrom::Start(0)).expect("Cannot seek");
-
-            file.set_len(0).expect("Cannot set file len to 0");
-
-            match file.write(format!("{}\n{} = \"{}\"", content, dependency.name, dependency.version).as_bytes()) {
-                Ok(_) => (),
-                Err(e) => return Err(Box::new(e))
-            }
-
-            println!("{}", fs::read_to_string(file_path.clone()).expect("Failed to read file"));
         }
     }
 
