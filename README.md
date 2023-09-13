@@ -1,6 +1,6 @@
 # Project Generator
 
-## By SKKYZ3R#5453
+## By [ViipeR](https://discord.com/users/518113582110605326)
 
 --------------
 
@@ -11,41 +11,48 @@ This program is a cli dev tool program. It allows you to create the projects of 
 --------------
 
 ### Usage
+
 # Linux
 
 ```console
 foo@bar:~$ ./project_generator
-Please enter the type of project you want to create [rust]: 
+Welcome to the Project Generator!
+ 1. Rust
+ 2. Exit
+>
 ```
 
-Here, you specify the language you want to create a project.
+Here, you specify the language you want to create a project, here a Rust example.
 
 ```console
-Please enter the type of project you want to create [rust]: rust
-Creating Rust project...
+Welcome to the Project Generator!
+ 1. Rust
+ 2. Exit
+> 1
 ```
 
 And it creates your Rust project.
-
-❗ The console input isn't case-sensitive ❗
 
 # Windows
 
 ```bash
 C:\Users\foo\Desktop> ./project_generator.exe
-Please enter the type of project you want to create [rust]: 
+Welcome to the Project Generator!
+ 1. Rust
+ 2. Exit
+>
 ```
 
-Here, you specify the language you want to create a project.
+Here, you specify the language you want to create a project, here a Rust example.
 
 ```console
-Please enter the type of project you want to create [rust]: rust
-Creating Rust project...
+Welcome to the Project Generator!
+ 1. Rust
+ 2. Exit
+> 1
 ```
 
 And it creates your Rust project.
-
-❗ The console input isn't case-sensitive ❗
 
 ### Disclaimer
 
