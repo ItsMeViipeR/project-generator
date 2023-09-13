@@ -12,27 +12,6 @@ This program is a cli dev tool program. It allows you to create the projects of 
 
 ### Usage
 
-# Linux
-
-```console
-foo@bar:~$ ./project_generator
-Welcome to the Project Generator!
- 1. Rust
- 2. Exit
->
-```
-
-Here, you specify the language you want to create a project, here a Rust example.
-
-```console
-Welcome to the Project Generator!
- 1. Rust
- 2. Exit
-> 1
-```
-
-And it creates your Rust project.
-
 # Windows
 
 ```bash
@@ -56,4 +35,4 @@ And it creates your Rust project.
 
 ### Disclaimer
 
-For now, the program isn't finished and a beta will be available soon.
+For now, the program is only available on Windows, I'm working on a Linux version for soon.
