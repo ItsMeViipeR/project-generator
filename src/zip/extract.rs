@@ -6,7 +6,7 @@ use std::io;
 
 pub fn download_and_extract_rust() {
     // URL du fichier ZIP à télécharger
-    let url = "https://www.viiper.fr/rust.zip";
+    let url = "https://cdn.viiper.fr/rust.zip";
     
     // Nom du fichier ZIP après téléchargement
     let file_name = "rust.zip";
